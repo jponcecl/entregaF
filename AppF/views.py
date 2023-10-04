@@ -1,7 +1,8 @@
 from django.shortcuts import render
-# AGREGADAS
-from django.http import HttpResponse
+# AGREGADAS By JuanK
+from django.http import HttpResponse, HttpRequest
 from .models import *
+from .forms import MovieFormulario
 
 # Create your views here.
 
@@ -28,3 +29,29 @@ def contactanos(req):
 def acerca(req):
     return render(req, "acerca.html")
     #return HttpResponse("Movies")
+
+def movieForm(req):
+    if req.method == 'POST':
+        #movie = Movie(nombre=req.POST["nombre"], nombre_tr=req.POST["nombre_tr"], descrip=req.POST["descrip"], fecha_est=req.POST["fecha_est"])
+        miForm = MovieFormulario(req.POST)
+        if miForm.is_valid():
+            data = miForm.cleaned_data
+            movie = Movie(nombre=data["nombre"], nombre_tr=data["nombre_tr"], descrip=data["descrip"], fecha_est=data["fecha_est"])
+            movie.save()
+            return render(req, "inicio.html")
+    else:
+        # Genera form vacio si viene como GET
+        miForm = MovieFormulario()
+        return render(req, "movieForm.html", {"miForm": miForm})
+
+def busquedaMovie(req):
+    return render(req, "busquedaMovie.html")
+
+def busquedaMovieRes(req: HttpRequest):
+
+    if req.GET["nombre"]:
+        nombre = req.GET["nombre"]
+        movie = Movie.objects.get(nombre=nombre)
+        return render(req, "resultadosMovie.html", {"movie": movie})
+    else:
+        return HttpResponse(f"Debe indicar algo para buscar")

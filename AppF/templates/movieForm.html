@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block cuerpo %}
+
+<form action="{% url 'movieForm' %}" method="POST">{% csrf_token %}
+{{miForm.as_p}}
+<!-- Se oculta para usar ^
+<table border="0">
+	<tr>
+		<td>Nombre:</td>
+		<td>
+			<input type="text" name="nombre" maxlength="100" required>
+		</td>
+	</tr>
+	<tr>
+		<td>Nombre Traducido:</td>
+		<td>
+			<input type="text" name="nombre_tr" maxlength="100" required>
+		</td>
+	</tr>
+	<tr>
+		<td>Descripción:</td>
+		<td>
+			<textarea name="descrip" required></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td>fecha de Estreno:</td>
+		<td>
+			<input type="date" name="fecha_est" required>
+		</td>
+	</tr>
+</table>
+-->
+<br>
+<input type="submit" name="Enviar">
+<br>
+</form>
+<br>
+
+{% endblock cuerpo %}

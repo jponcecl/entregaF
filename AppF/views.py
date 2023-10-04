@@ -6,7 +6,9 @@ from .models import *
 # Create your views here.
 
 def inicio(req):
-    return HttpResponse("Inicio")
+    return render(req, "inicio.html")
+    #return HttpResponse("Inicio")
 
 def movies(req):
-    return HttpResponse("Movies")
+    return render(req, "movies.html")
+    #return HttpResponse("Movies")

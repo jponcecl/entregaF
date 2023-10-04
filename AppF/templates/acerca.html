@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block cuerpo %}
+
+<h1>Acerca de...</h1>
+<HR>
+<table border='0'>
+	<tr>
+		<td>
+			{% load static %}
+			<img src="{% static 'img/foto.jpg' %}" height="55%" width="55%">
+		</td>
+		<td>
+			<P>Mi nombre es Juan Ponce Contreras, soy ingeniero en informática y profesor de Estado para la Educación Técnico profesional</P>
+			<P>Este desarrollo corresponde a un curso de programación en Python para WEB en CoderHouse</P>
+			<P>Espero cumplir con todos los requerimientos</P>
+			<P>Las clases fueron muy provechosas y aprendi mucho sobre el lenguaje Python y el framwork Django</P>
+		</td>
+	</tr>
+</table>
+
+
+{% endblock cuerpo %}

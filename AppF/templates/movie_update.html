@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block cuerpo %}
+
+<form action="{% url 'movieUpdate' movie.id %}" method="POST">{% csrf_token %}
+{{form.as_p}}
+<br>
+<input type="submit" name="Actualizar">
+<br>
+</form>
+<br>
+
+{% endblock cuerpo %}

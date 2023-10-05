@@ -1,6 +1,9 @@
 from django.shortcuts import render
 # AGREGADAS By JuanK
 from django.http import HttpResponse, HttpRequest
+from django.views.generic import ListView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import DeleteView, UpdateView, CreateView
 from .models import *
 from .forms import MovieFormulario
 
@@ -104,3 +107,33 @@ def editaMovie(req, id):
         "fecha_est": movie.fecha_est,
         })
         return render(req, "editaMovie.html", {"miForm": miForm, "id": movie.id})
+
+class movieList(ListView):
+    model = Movie
+    template_name = "movie_list.html"
+    context_object_name = "movies"
+
+class movieDetail(DetailView):
+    model = Movie
+    template_name = "movie_detail.html"
+    context_object_name = "movie"
+
+class movieCreate(CreateView):
+    model = Movie
+    template_name = "movie_create.html"
+    fields = ('__all__')
+    success_url = '/AppF/'
+
+class movieUpdate(UpdateView):
+    model = Movie
+    template_name = "movie_update.html"
+    fields = ('__all__')
+    success_url = '/AppF/movie-list'
+    context_object_name = "movie"
+
+class movieDelete(DeleteView):
+    model = Movie
+    template_name = "movie_delete.html"
+    fields = ('__all__')
+    success_url = '/AppF/movie-list'
+    context_object_name = "movie"

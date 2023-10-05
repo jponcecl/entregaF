@@ -7,11 +7,16 @@
 {% if movies %}
 	<ul>
 	{% for movie in movies %}
-		<li>{{movie}}</li>
+		<!--<li>{{movie}}</li>-->
+		<li>{{movie.nombre}} ({{movie.nombre_tr}}) <a href="{% url 'movieDetail' movie.id %}">Ver detalles</a></li>
 	{% endfor %}
 	</ul>
 {% else %}
 	No hay coincidencias para el texto ingresado<br><br>
 {% endif %}
+
+<button>
+	<a href="{% url 'busquedaMovie' %}">Volver</a>
+</button>
 
 {% endblock cuerpo %}

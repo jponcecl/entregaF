@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block cuerpo %}
+<h1>Nueva Pelicula</h1>
+<hr>
+<form action="{% url 'creaMovie' %}" method="POST">{% csrf_token %}
+{{miForm.as_p}}
+<br>
+<input type="submit" name="Enviar">
+<br>
+</form>
+<br>
+{% endblock cuerpo %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block cuerpo %}
+<h1>Nueva Pelicula</h1>
+<hr>
+<form action="{% url 'editaMovie' id %}" method="POST">{% csrf_token %}
+{{miForm.as_div}}
+<br>
+<input type="submit" name="Actualizar">
+<br>
+</form>
+<br>
+{% endblock cuerpo %}

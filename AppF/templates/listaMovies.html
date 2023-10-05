@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block cuerpo %}
+
+{% if movies %}
+<table border="0">
+	<ul>
+		{% for movie in movies %}
+			<tr>
+				<td><li>{{movie}}</li></td>
+				<td>
+					<form action="{% url 'borraMovie' movie.id %}" method="POST">{% csrf_token %}
+						&nbsp;<input type="submit" value="Borrar">
+					</form>
+				</td>
+				<td>
+					<form action="{% url 'editaMovie' movie.id %}" method="GET">{% csrf_token %}
+						&nbsp;<input type="submit" value="Editar">
+					</form>
+				</td>
+			<tr>
+		{% endfor %}
+	</ul>
+</table>
+{% else %}
+	<br>
+	<h1>No hay peliculas aun</h1>
+{% endif %}
+<br><br>
+{% endblock cuerpo %}

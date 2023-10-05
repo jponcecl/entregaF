@@ -2,7 +2,7 @@
 
 {% block cuerpo %}
 
-<P>Resultados:</P>
+<P><h1>Resultados:</h1></P>
 <HR>
 {% if movies %}
 	<ul>
@@ -10,6 +10,8 @@
 		<li>{{movie}}</li>
 	{% endfor %}
 	</ul>
+{% else %}
+	No hay coincidencias para el texto ingresado<br><br>
 {% endif %}
 
 {% endblock cuerpo %}

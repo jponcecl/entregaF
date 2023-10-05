@@ -10,7 +10,12 @@ urlpatterns = [
     path('movie-form/', movieForm, name='movieForm'),
     path('busqueda-movie/', busquedaMovie, name='busquedaMovie'),
     path('busqueda-movie-res/', busquedaMovieRes, name='busquedaMovieRes'),
-     
+    
+    path('lista-movies/', listaMovies, name='listaMovies'),
+    path('crea-movie/', creaMovie, name='creaMovie'),
+    path('borra-movie/<int:id>', borraMovie, name='borraMovie'),
+    path('edita-movie/<int:id>', editaMovie, name='editaMovie'),
+    
     path('cuentas/', cuentas, name='Cuentas'),
     path('contactanos/', contactanos, name='Contactanos'),
     path('acerca/', acerca, name='Acerca'),

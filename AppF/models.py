@@ -8,7 +8,7 @@ class Movie(models.Model):
     fecha_est = models.DateField()
     #imagen    = models.ImageField(upload_to='images')
     def __str__(self):
-        return f'{self.nombre} - {self.nombre_tr} - {self.fecha_est}'
+        return f'{self.nombre} - {self.nombre_tr}'
     class Meta():
         ordering = ('nombre','nombre_tr')
         unique_together = ('nombre',)

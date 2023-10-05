@@ -137,3 +137,4 @@ class movieDelete(DeleteView):
     fields = ('__all__')
     success_url = '/AppF/movie-list'
     context_object_name = "movie"
+

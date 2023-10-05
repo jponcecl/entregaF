@@ -5,10 +5,17 @@
 	<h1>Detalle de la Pelicula</h1>
 	<HR>
 	<h4>Nombre: {{movie.nombre}}
-	<h4>Nombre Traducido: {{movie.nombre_tr}}
+	<h4>Nombre Traducido: {{movie.nombre_tr}}<br>
+	{% if movie.imagen %}
+		<img src="{{ movie.imagen.url }}">
+	{% else %}
+		{% load static %}
+		<img src="{% static 'img/no_disponible.png' %}" height="25%" width="25%">
+	{% endif %}
 	<h4>Descripcion: {{movie.descrip}}
 	<h4>Fecha de Estreno: {{movie.fecha_est}}
 	<br>
+
 	<input type="button" onclick="history.back()" name="Volver" value="Volver">
 	
 {% endblock cuerpo %}

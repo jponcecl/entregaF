@@ -6,6 +6,7 @@ class Movie(models.Model):
     nombre_tr = models.CharField(max_length=100)
     descrip   = models.TextField()
     fecha_est = models.DateField()
+    imagen    = models.ImageField(upload_to='images', blank=True, null=True)
     #imagen    = models.ImageField(upload_to='images')
     def __str__(self):
         return f'{self.nombre} - {self.nombre_tr}'

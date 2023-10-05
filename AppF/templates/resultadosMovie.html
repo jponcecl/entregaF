@@ -2,8 +2,14 @@
 
 {% block cuerpo %}
 
-<P>Resultados</P>
+<P>Resultados:</P>
 <HR>
-{{movie}}
+{% if movies %}
+	<ul>
+	{% for movie in movies %}
+		<li>{{movie}}</li>
+	{% endfor %}
+	</ul>
+{% endif %}
 
 {% endblock cuerpo %}

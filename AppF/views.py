@@ -51,7 +51,7 @@ def busquedaMovieRes(req: HttpRequest):
 
     if req.GET["nombre"]:
         nombre = req.GET["nombre"]
-        movie = Movie.objects.get(nombre=nombre)
-        return render(req, "resultadosMovie.html", {"movie": movie})
+        movies = Movie.objects.filter(nombre__icontains=nombre)
+        return render(req, "resultadosMovie.html", {"movies": movies})
     else:
         return HttpResponse(f"Debe indicar algo para buscar")

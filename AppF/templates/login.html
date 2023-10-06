@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block cuerpo %}
+<h1>Ingreso</h1>
+<hr>
+<form action="{% url 'login' %}" method="POST">{% csrf_token %}
+{{miForm.as_p}}
+<br>
+<input type="submit" name="Login">
+<br>
+</form>
+<br>
+{% endblock cuerpo %}

@@ -22,6 +22,8 @@ urlpatterns = [
     path('movie-update/<pk>', movieUpdate.as_view(), name='movieUpdate'),
     path('movie-delete/<pk>', movieDelete.as_view(), name='movieDelete'),
     
+    path('login', login, name='login'),
+    
     path('cuentas/', cuentas, name='Cuentas'),
     path('contactanos/', contactanos, name='Contactanos'),
     path('acerca/', acerca, name='Acerca'),

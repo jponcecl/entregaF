@@ -6,6 +6,8 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView, UpdateView, CreateView
 from .models import *
 from .forms import MovieFormulario
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 
@@ -137,4 +139,23 @@ class movieDelete(DeleteView):
     fields = ('__all__')
     success_url = '/AppF/movie-list'
     context_object_name = "movie"
+    
+def login(req):
+    if req.method == 'POST':
+        miForm = AuthenticationForm(req, data=req.POST)
+        if miForm.is_valid():
+            data = miForm.cleaned_data
+            usr = data["username"]
+            pwd = data["password"]
+            
+            user = authenticate(username=usr, password=pwd)
+            if user:
+                login(req, user)
+                return render(req, "inicio.html", {"mensaje": f"Bienvenido {usr}!"})
+            else:
+                return render(req, "inicio.html", {"mensaje": f"Usuario o contraseña incorrecta!"})
+    else:
+        # Genera form con datos si viene como GET
+        miForm = AuthenticationForm()
+        return render(req, "login.html", {"miForm": miForm})
 

@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'AppF',
     ### Se agrego aplicacion
+    'django_cleanup.apps.CleanupConfig',
+    ### By JuanK para que se borren las imagenes de 'MEDIA' al borrar un registro
 ]
 
 MIDDLEWARE = [

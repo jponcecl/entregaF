@@ -1,6 +1,7 @@
 # SOLO en url.py del proyecto... from django.contrib import admin
 from django.urls import path
 from .views import *
+from django.contrib.auth.views import LogoutView
 urlpatterns = [
     # SOLO en url.py del proyecto... path('admin/', admin.site.urls),
     path('', inicio, name='Inicio'),
@@ -17,12 +18,14 @@ urlpatterns = [
     path('edita-movie/<int:id>', editaMovie, name='editaMovie'),
     
     path('movie-list/', movieList.as_view(), name='movieList'),
-    path('movie-detail/<pk>', movieDetail.as_view(), name='movieDetail'),
+    path('movie-detail/<pk>/', movieDetail.as_view(), name='movieDetail'),
     path('movie-create/', movieCreate.as_view(), name='movieCreate'),
-    path('movie-update/<pk>', movieUpdate.as_view(), name='movieUpdate'),
-    path('movie-delete/<pk>', movieDelete.as_view(), name='movieDelete'),
+    path('movie-update/<pk>/', movieUpdate.as_view(), name='movieUpdate'),
+    path('movie-delete/<pk>/', movieDelete.as_view(), name='movieDelete'),
     
-    path('login', login, name='login'),
+    path('do-login/', doLogin, name='doLogin'),
+    path('do-register/', doRegister, name='doRegister'),
+    path('do-logout/', LogoutView.as_view(template_name="logout.html"), name='doLogout'),
     
     path('cuentas/', cuentas, name='Cuentas'),
     path('contactanos/', contactanos, name='Contactanos'),

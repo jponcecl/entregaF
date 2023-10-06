@@ -3,10 +3,10 @@
 {% block cuerpo %}
 <h1>Ingreso</h1>
 <hr>
-<form action="{% url 'doLogin' %}" method="POST">{% csrf_token %}
+<form action="{% url 'doRegister' %}" method="POST">{% csrf_token %}
 {{miForm.as_p}}
 <br>
-<input type="submit" name="Login">
+<input type="submit" name="Registrarse">
 <br>
 </form>
 <br>

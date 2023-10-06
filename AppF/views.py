@@ -6,8 +6,11 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView, UpdateView, CreateView
 from .models import *
 from .forms import MovieFormulario
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 
 # Create your views here.
 
@@ -27,6 +30,7 @@ def cuentas(req):
     return render(req, "cuentas.html")
     #return HttpResponse("Movies")
 
+@login_required(login_url='/AppF/do-login')
 def contactanos(req):
     return render(req, "contactanos.html")
     #return HttpResponse("Movies")
@@ -60,7 +64,8 @@ def busquedaMovieRes(req: HttpRequest):
         return render(req, "resultadosMovie.html", {"movies": movies})
     else:
         return HttpResponse(f"Debe indicar algo para buscar")
-        
+
+#@staff_member_required(login_url='/AppF/do-login')       
 def listaMovies(req):
     movies = Movie.objects.all()
     return render(req, "listaMovies.html", {"movies": movies})
@@ -110,7 +115,8 @@ def editaMovie(req, id):
         })
         return render(req, "editaMovie.html", {"miForm": miForm, "id": movie.id})
 
-class movieList(ListView):
+class movieList(LoginRequiredMixin, ListView):
+#class movieList(StaffRequiredMixin, ListView):
     model = Movie
     template_name = "movie_list.html"
     context_object_name = "movies"
@@ -140,7 +146,7 @@ class movieDelete(DeleteView):
     success_url = '/AppF/movie-list'
     context_object_name = "movie"
     
-def login(req):
+def doLogin(req):
     if req.method == 'POST':
         miForm = AuthenticationForm(req, data=req.POST)
         if miForm.is_valid():
@@ -152,10 +158,23 @@ def login(req):
             if user:
                 login(req, user)
                 return render(req, "inicio.html", {"mensaje": f"Bienvenido {usr}!"})
-            else:
-                return render(req, "inicio.html", {"mensaje": f"Usuario o contraseña incorrecta!"})
+        return render(req, "inicio.html", {"mensaje": f"Usuario o contraseña incorrecta!"})
     else:
         # Genera form con datos si viene como GET
         miForm = AuthenticationForm()
         return render(req, "login.html", {"miForm": miForm})
 
+def doRegister(req):
+    if req.method == 'POST':
+        miForm = UserCreationForm(req.POST)
+        if miForm.is_valid():
+            data = miForm.cleaned_data
+            usr = data["username"]
+            miForm.save()
+            return render(req, "inicio.html", {"mensaje": f"Usuario {usr} creado exitosamente!"})
+            
+        return render(req, "inicio.html", {"mensaje": f"Ocurrió un error"})
+    else:
+        # Genera form con datos si viene como GET
+        miForm = UserCreationForm()
+        return render(req, "register.html", {"miForm": miForm})

@@ -14,10 +14,21 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 
 # Create your views here.
-
+def buscar_url_avatar(user):
+    avatar = Avatar.objects.filter(user=user)
+    if avatar.exists():
+        # Se usa first() para obtener el primer objeto
+        return avatar.first().imagen.url
+    # Si no existe el avatar regresar un None
+    return None
+    
 def inicio(req):
+    #print(buscar_url_avatar(req.user))
+    #global ava=buscar_url_avatar(req.user)
     try:
         avatar = Avatar.objects.get(user=req.user.id)
+        global ava
+        ava = avatar.imagen.url
         return render(req, "inicio.html", {"url_avatar": avatar.imagen.url})
     except:
         return render(req, "inicio.html")
@@ -135,17 +146,32 @@ class movieList(LoginRequiredMixin, ListView):
     model = Movie
     template_name = "movie_list.html"
     context_object_name = "movies"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['url_avatar'] = ava
+        return context
 
 class movieDetail(DetailView):
     model = Movie
     template_name = "movie_detail.html"
     context_object_name = "movie"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['url_avatar'] = ava
+        return context
 
 class movieCreate(CreateView):
     model = Movie
     template_name = "movie_create.html"
     fields = ('__all__')
     success_url = '/AppF/'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['url_avatar'] = ava
+        return context
 
 class movieUpdate(UpdateView):
     model = Movie
@@ -153,6 +179,11 @@ class movieUpdate(UpdateView):
     fields = ('__all__')
     success_url = '/AppF/movie-list'
     context_object_name = "movie"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['url_avatar'] = ava
+        return context
 
 class movieDelete(DeleteView):
     model = Movie
@@ -172,7 +203,9 @@ def doLogin(req):
             user = authenticate(username=usr, password=pwd)
             if user:
                 login(req, user)
-                return render(req, "inicio.html", {"mensaje": f"Bienvenido {usr}!"})
+                global ava
+                ava = buscar_url_avatar(req.user)
+                return render(req, "inicio.html", {"mensaje": f"Bienvenido {usr}!", "url_avatar": ava})
         return render(req, "inicio.html", {"mensaje": f"Usuario o contraseña incorrecta!"})
     else:
         # Genera form con datos si viene como GET

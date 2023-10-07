@@ -1,4 +1,4 @@
- {% extends 'base.html' %}
+{% extends 'base.html' %}
 
 {% block cuerpo %}
 
@@ -6,30 +6,30 @@
 	<h2>Esta seccion requiere permisos de administracion</h2>
 	<hr>
 {% else%}
-{% if movies %}
-	<a href="{% url 'movieCreate' %}">Agregar película</a>
-	<hr>
-	<table border="0">
-		<ul>
-			{% for movie in movies %}
-				<tr>
-					<td>
-						<li><a href="{% url 'movieDetail' movie.id %}">{{movie.nombre}} ({{movie.nombre_tr}})</a></li>
-					</td>
-					<td>
-						<button>
-							<a href="{% url 'movieDelete' movie.id %}">Borrar</a>
-						</button>
-					</td>
-					<td>
-						<button>
-							<a href="{% url 'movieUpdate' movie.id %}">Editar</a>
-						</button>
-					</td>
-				<tr>
-			{% endfor %}
-		</ul>
-	</table>
+	{% if movies %}
+		<a href="{% url 'movieCreate' %}">Agregar película</a>
+		<hr>
+		<table border="0">
+			<ul>
+				{% for movie in movies %}
+					<tr>
+						<td>
+							<li><a href="{% url 'movieDetail' movie.id %}">{{movie.nombre}} ({{movie.nombre_tr}})</a></li>
+						</td>
+						<td>
+							<button>
+								<a href="{% url 'movieDelete' movie.id %}">Borrar</a>
+							</button>
+						</td>
+						<td>
+							<button>
+								<a href="{% url 'movieUpdate' movie.id %}">Editar</a>
+							</button>
+						</td>
+					<tr>
+				{% endfor %}
+			</ul>
+		</table>
 	{% else %}
 		<br>
 		<h1>No hay peliculas aun</h1>

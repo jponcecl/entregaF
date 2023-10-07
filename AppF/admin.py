@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # By JuanK
-from .models import Movie
+from .models import Movie, Avatar
 from datetime import datetime
 
 # Register your models here.
@@ -22,3 +22,4 @@ class MovieAdmin(admin.ModelAdmin):
             #return (datetime.now().date() - object.fecha_est).days
 # By JuanK
 admin.site.register(Movie, MovieAdmin)
+admin.site.register(Avatar)

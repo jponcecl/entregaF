@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block cuerpo %}
+
+{% if mensaje %}
+	{{mensaje}}
+{% else %}
+	<form action="{% url 'editarAvatar' %}" enctype="multipart/form-data" method="POST">{% csrf_token %}
+	{{miForm.as_p}}
+	<br>
+	<input type="submit" name="Actualizar">
+	<br>
+	</form>
+	<br>
+{% endif %}
+{% endblock cuerpo %} 

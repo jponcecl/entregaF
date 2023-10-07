@@ -5,9 +5,10 @@ from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView, UpdateView, CreateView
 from .models import *
-from .forms import MovieFormulario
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from .forms import MovieFormulario, UserEditForm, AvatarForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.views import LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -15,8 +16,11 @@ from django.contrib.admin.views.decorators import staff_member_required
 # Create your views here.
 
 def inicio(req):
-    return render(req, "inicio.html")
-    #return HttpResponse("Inicio")
+    try:
+        avatar = Avatar.objects.get(user=req.user.id)
+        return render(req, "inicio.html", {"url_avatar": avatar.imagen.url})
+    except:
+        return render(req, "inicio.html")
 
 def buscar(req):
     return render(req, "buscar.html")
@@ -32,11 +36,19 @@ def cuentas(req):
 
 @login_required(login_url='/AppF/do-login')
 def contactanos(req):
-    return render(req, "contactanos.html")
+    try:
+        avatar = Avatar.objects.get(user=req.user.id)
+        return render(req, "contactanos.html", {"url_avatar": avatar.imagen.url})
+    except:
+        return render(req, "contactanos.html")
     #return HttpResponse("Movies")
 
 def acerca(req):
-    return render(req, "acerca.html")
+    try:
+        avatar = Avatar.objects.get(user=req.user.id)
+        return render(req, "acerca.html", {"url_avatar": avatar.imagen.url})
+    except:
+        return render(req, "acerca.html")
     #return HttpResponse("Movies")
 
 def movieForm(req):
@@ -54,7 +66,11 @@ def movieForm(req):
         return render(req, "movieForm.html", {"miForm": miForm})
 
 def busquedaMovie(req):
-    return render(req, "busquedaMovie.html")
+    try:
+        avatar = Avatar.objects.get(user=req.user.id)
+        return render(req, "busquedaMovie.html", {"url_avatar": avatar.imagen.url})
+    except:
+        return render(req, "busquedaMovie.html")
 
 def busquedaMovieRes(req: HttpRequest):
 
@@ -116,7 +132,6 @@ def editaMovie(req, id):
         return render(req, "editaMovie.html", {"miForm": miForm, "id": movie.id})
 
 class movieList(LoginRequiredMixin, ListView):
-#class movieList(StaffRequiredMixin, ListView):
     model = Movie
     template_name = "movie_list.html"
     context_object_name = "movies"
@@ -178,3 +193,45 @@ def doRegister(req):
         # Genera form con datos si viene como GET
         miForm = UserCreationForm()
         return render(req, "register.html", {"miForm": miForm})
+
+def editarPerfil(req):
+    usuario = req.user
+    if req.method == 'POST':
+        miForm = UserEditForm(req.POST, instance=req.user)
+        if miForm.is_valid():
+            data = miForm.cleaned_data
+            usuario.first_name=data["first_name"]
+            usuario.last_name=data["last_name"]
+            usuario.email=data["email"]
+            usuario.set_password(data["passw1"])
+            usuario.save()
+            
+            return render(req, "inicio.html", {"mensaje": "Perfil actualizado exitosamente!"})
+        else:
+            return render(req, "editarPerfil.html", {"miForm": miForm})
+    else:
+        # Genera form con datos del usuario logeado
+        if usuario.id != None:
+            miForm = UserEditForm(instance=usuario)
+            return render(req, "editarPerfil.html", {"miForm": miForm})
+        else:
+            #LogoutView.as_view(template_name="logout.html")
+            return render(req, "logout.html", {"mensaje": "Debe ingresar nuevamente!"})
+def editarAvatar(req):
+    usuario = req.user
+    if (usuario.id != None):
+        if req.method == 'POST':
+            miForm = AvatarForm(req.POST, req.FILES)
+            if miForm.is_valid():
+                data = miForm.cleaned_data
+                avatar = Avatar(user=req.user, imagen=data["imagen"])
+                avatar.save()
+                
+                return render(req, "inicio.html", {"mensaje": "Avatar actualizado exitosamente!"})
+        else:
+            # Genera form con datos del usuario logeado
+            miForm = AvatarForm()
+            return render(req, "editarAvatar.html", {"miForm": miForm})
+    else:
+        return render(req, "editarAvatar.html", {"mensaje": "Debe estar logeado para esta operación"})
+

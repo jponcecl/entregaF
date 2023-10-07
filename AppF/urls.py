@@ -27,6 +27,9 @@ urlpatterns = [
     path('do-register/', doRegister, name='doRegister'),
     path('do-logout/', LogoutView.as_view(template_name="logout.html"), name='doLogout'),
     
+    path('editar-perfil/', editarPerfil, name='editarPerfil'),
+    path('editar-avatar/', editarAvatar, name='editarAvatar'),
+    
     path('cuentas/', cuentas, name='Cuentas'),
     path('contactanos/', contactanos, name='Contactanos'),
     path('acerca/', acerca, name='Acerca'),

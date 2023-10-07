@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block cuerpo %}
+<h1>Actualizar Datos</h1>
+<hr>
+<form action="{% url 'editarPerfil' %}" method="POST">{% csrf_token %}
+{{miForm.as_div}}
+<br>
+<input type="submit" name="Actualizar">
+<br>
+</form>
+<br>
+{% endblock cuerpo %} 

@@ -277,6 +277,8 @@ def editarAvatar(req):
                 data = miForm.cleaned_data
                 avatar = Avatar(user=req.user, imagen=data["imagen"])
                 avatar.save()
+                avatar = Avatar.objects.filter(user=req.user)
+                global ava
                 ava = buscar_url_avatar(req.user)
                 return render(req, "inicio.html", {"mensaje": "Avatar actualizado exitosamente!", "url_avatar": ava})
         else:

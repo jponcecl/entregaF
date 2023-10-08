@@ -43,7 +43,7 @@ class UserEditForm(UserChangeForm):
         return pw2
 
 class AvatarForm(forms.ModelForm):
-
+    imagen = forms.ImageField(required=True)
     class Meta:
         model = Avatar
         fields = ("imagen",)

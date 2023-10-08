@@ -84,14 +84,17 @@ def busquedaMovie(req):
         return render(req, "busquedaMovie.html")
 
 def busquedaMovieRes(req: HttpRequest):
-
     if req.GET["nombre"]:
         nombre = req.GET["nombre"]
         movies = Movie.objects.filter(nombre__icontains=nombre)
-        return render(req, "resultadosMovie.html", {"movies": movies})
+        try:
+            avatar = Avatar.objects.get(user=req.user.id)
+            return render(req, "resultadosMovie.html", {"movies": movies, "url_avatar": avatar.imagen.url})
+        except:
+            return render(req, "resultadosMovie.html", {"movies": movies})
     else:
         return HttpResponse(f"Debe indicar algo para buscar")
-
+    
 #@staff_member_required(login_url='/AppF/do-login')       
 def listaMovies(req):
     movies = Movie.objects.all()
@@ -115,7 +118,7 @@ def borraMovie(req, id):
     if req.method == 'POST':
         movie = Movie.objects.get(id=id)
         movie.delete()
-        
+
         movies = Movie.objects.all() # Busca todos despues de borrar
         return render(req, "listaMovies.html", {"movies": movies})
 
@@ -149,7 +152,8 @@ class movieList(LoginRequiredMixin, ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['url_avatar'] = ava
+        if 'ava' in globals():
+            context['url_avatar'] = ava
         return context
 
 class movieDetail(DetailView):
@@ -159,7 +163,8 @@ class movieDetail(DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['url_avatar'] = ava
+        if 'ava' in globals():
+            context['url_avatar'] = ava
         return context
 
 class movieCreate(CreateView):
@@ -167,10 +172,12 @@ class movieCreate(CreateView):
     template_name = "movie_create.html"
     fields = ('__all__')
     success_url = '/AppF/'
+    context_object_name = "movie"
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['url_avatar'] = ava
+        if 'ava' in globals():
+            context['url_avatar'] = ava
         return context
 
 class movieUpdate(UpdateView):
@@ -182,7 +189,8 @@ class movieUpdate(UpdateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['url_avatar'] = ava
+        if 'ava' in globals():
+            context['url_avatar'] = ava
         return context
 
 class movieDelete(DeleteView):
@@ -239,32 +247,42 @@ def editarPerfil(req):
             usuario.set_password(data["passw1"])
             usuario.save()
             
-            return render(req, "inicio.html", {"mensaje": "Perfil actualizado exitosamente!"})
+            ava = buscar_url_avatar(req.user)
+            #return render(req, "inicio.html", {"mensaje": f"Bienvenido {usr}!", "url_avatar": ava})
+            return render(req, "inicio.html", {"mensaje": "Perfil actualizado exitosamente!", "url_avatar": ava})
         else:
             return render(req, "editarPerfil.html", {"miForm": miForm})
     else:
         # Genera form con datos del usuario logeado
         if usuario.id != None:
             miForm = UserEditForm(instance=usuario)
-            return render(req, "editarPerfil.html", {"miForm": miForm})
+            ava = buscar_url_avatar(req.user)
+            return render(req, "editarPerfil.html", {"miForm": miForm, "url_avatar": ava})
         else:
             #LogoutView.as_view(template_name="logout.html")
-            return render(req, "logout.html", {"mensaje": "Debe ingresar nuevamente!"})
+            return render(req, "logout.html", {"mensaje": "Por seguridad debe ingresar nuevamente!"})
+
 def editarAvatar(req):
     usuario = req.user
     if (usuario.id != None):
         if req.method == 'POST':
             miForm = AvatarForm(req.POST, req.FILES)
             if miForm.is_valid():
+                try:
+                    borra = Avatar.objects.get(user=req.user)
+                    borra.delete()
+                except:
+                    pass
+                
                 data = miForm.cleaned_data
                 avatar = Avatar(user=req.user, imagen=data["imagen"])
                 avatar.save()
-                
-                return render(req, "inicio.html", {"mensaje": "Avatar actualizado exitosamente!"})
+                ava = buscar_url_avatar(req.user)
+                return render(req, "inicio.html", {"mensaje": "Avatar actualizado exitosamente!", "url_avatar": ava})
         else:
             # Genera form con datos del usuario logeado
             miForm = AvatarForm()
-            return render(req, "editarAvatar.html", {"miForm": miForm})
+            ava = buscar_url_avatar(req.user)
+            return render(req, "editarAvatar.html", {"miForm": miForm, "url_avatar": ava})
     else:
         return render(req, "editarAvatar.html", {"mensaje": "Debe estar logeado para esta operación"})
-

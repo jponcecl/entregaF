@@ -1,4 +1,5 @@
 from django.db import models
+from django import forms
 from django.contrib.auth.models import User
 from datetime import datetime, date
 
@@ -19,4 +20,5 @@ class Movie(models.Model):
 
 class Avatar(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    #user = models.OneToOneField(User, on_delete=models.CASCADE)
     imagen = models.ImageField(verbose_name='Imagen de avatar', upload_to='avatares', blank=True, null=True)

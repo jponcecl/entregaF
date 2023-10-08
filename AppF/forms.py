@@ -2,15 +2,18 @@
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
-from django.forms.widgets import NumberInput
+from django.forms.widgets import NumberInput, DateInput
 from .models import Movie, Avatar
 import datetime
 
-class MovieFormulario(forms.Form):
+forms.DateInput.input_type="date"
+forms.DateTimeInput.input_type="datetime-local" 
+
+class MovieFormulario(forms.ModelForm):
     nombre    = forms.CharField(max_length=100)          
     nombre_tr = forms.CharField(max_length=100)
     descrip   = forms.CharField(widget=forms.Textarea)
-    fecha_est = forms.DateField(widget=NumberInput(attrs={'type': 'date'}))
+    fecha_est = forms.DateField()
 
 class UserEditForm(UserChangeForm):
     password = forms.CharField(

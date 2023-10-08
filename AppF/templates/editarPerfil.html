@@ -3,6 +3,7 @@
 {% block cuerpo %}
 <h1>Actualizar Datos</h1>
 <hr>
+<h3>Al actualizar perfil debera hacer login nuevamente por seguidad</h3>
 <form action="{% url 'editarPerfil' %}" method="POST">{% csrf_token %}
 {{miForm.as_div}}
 <br>

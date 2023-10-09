@@ -6,8 +6,10 @@
 	<h2>Esta seccion requiere permisos de administracion</h2>
 	<hr>
 {% else%}
+	<br>
+	<a class="btn btn-primary" href="{% url 'movieCreate' %}">Agregar película</a>
+	<br>
 	{% if movies %}
-		<a class="btn btn-primary" href="{% url 'movieCreate' %}">Agregar película</a>
 		<hr>
 		<table border="0">
 			<ul>
